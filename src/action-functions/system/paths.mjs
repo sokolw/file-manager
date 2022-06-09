@@ -1,5 +1,7 @@
+import os from 'os';
+
 const getDefaultPath = async () => {
-  return 'it getDefaultPath';
+  return os.homedir();
 }
 
 export {
