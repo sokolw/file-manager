@@ -1,4 +1,4 @@
-import { argsKeywords } from "../enums/argsKeyWords.js";
+import { argsKeywords } from "../enums/argsKeyWords.mjs";
 
 /**
  * Validate argument input username.
