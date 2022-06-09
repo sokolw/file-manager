@@ -1,7 +1,8 @@
 import { pipeline } from 'stream/promises';
 import { InputManager } from './InputManager.js';
-import { cliCommands } from './enums/cliCommands.js';
-import { argsValidator } from './validators/argsValidator.js';
+import { cliCommands } from './enums/cliCommands.mjs';
+import { argsValidator } from './validators/argsValidator.mjs';
+import { getDefaultPath } from './action-functions/system/paths.mjs'
 
 class Application {
   static _userName;
@@ -13,6 +14,7 @@ class Application {
 
   async start() {
     console.log(`Welcome to the File Manager, ${this._userName}!`);
+    console.log(`You are currently in ${await getDefaultPath()}`);
     const inputManager = new InputManager();
 
     process.on('SIGINT', () => { console.log('Close process!'); process.exit(); });
