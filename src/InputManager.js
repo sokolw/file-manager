@@ -3,6 +3,8 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import { Transform } from 'stream';
 import { pipeline } from 'stream/promises';
+import { runFunctions } from './action-functions/runFunctions.mjs';
+import { cliValidator } from './validators/cliValidator.mjs';
 
 
 export class InputManager extends Transform {
@@ -11,9 +13,16 @@ export class InputManager extends Transform {
   }
 
   async _transform(data, encoding, callback) {
-    // if (cliValidator())
-    console.log(path.join('F:\\RSS SCHOOL Node.js\\file-manager','..'))
-    callback(null, `manage ${data}`);
+    const validation = await cliValidator(data);
+    if (validation.status) {
+      const result = await runFunctions(validation.result);
+      // callback(null, `Validation result: ${validation.result.join(', ')}\n`);
+      callback(null, `Function: ${result}\n`)
+    } else {
+      callback(null, 'Invalid input\n');
+    }
+    // console.log(path.join('F:\\RSS SCHOOL Node.js\\file-manager','..'))
+    // callback(null, `manage ${data}`);
   };
 }
 
