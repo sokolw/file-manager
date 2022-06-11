@@ -7,5 +7,7 @@
 export const cliArgsValidator = (args, argsCount, argsList = null) => {
   if (argsList === null && args.length === argsCount) {
     return true;
+  } else if (argsList !== null && args.length === argsCount) {
+    return !!argsList[args[0]];
   }
 }
