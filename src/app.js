@@ -21,6 +21,7 @@ export class Application {
     const inputManager = new InputManager();
 
     process.on('SIGINT', () => { console.log(messages.exitApp(Application._userName)); process.exit(); });
+    process.on('.exit', () => { console.log(messages.exitApp(Application._userName)); process.exit(); });
 
     await pipeline(process.stdin, inputManager, process.stdout);
   }
