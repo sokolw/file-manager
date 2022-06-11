@@ -4,4 +4,5 @@ export const messages = Object.freeze({
   exitApp: (userName) => { return `Thank you for using File Manager, ${userName}!` },
   invalid: () => { return `Invalid input` },
   fail: () => { return `Operation failed` },
+  lineDelimiter : '------------------------------',
 });
