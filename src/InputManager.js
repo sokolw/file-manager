@@ -5,21 +5,26 @@ import { Transform } from 'stream';
 import { pipeline } from 'stream/promises';
 import { runFunctions } from './action-functions/runFunctions.mjs';
 import { cliValidator } from './validators/cliValidator.mjs';
+import { Application } from './app.js';
+import { messages } from './enums/messages.mjs';
+import { EOL } from 'os';
 
 
 export class InputManager extends Transform {
+  static _workingManager;
+
   constructor(options) {
     super(options);
+    InputManager._workingManager = this;
   }
 
   async _transform(data, encoding, callback) {
     const validation = await cliValidator(data);
     if (validation.status) {
       const result = await runFunctions(validation.result);
-      // callback(null, `Validation result: ${validation.result.join(', ')}\n`);
-      callback(null, `Function: ${result}\n`)
+      callback(null, `${result}${messages.currentPath(Application._currentPath).concat(EOL)}`);
     } else {
-      callback(null, 'Invalid input\n');
+      callback(null, messages.invalid().concat(EOL).concat(messages.currentPath(Application._currentPath)).concat(EOL));
     }
     // console.log(path.join('F:\\RSS SCHOOL Node.js\\file-manager','..'))
     // callback(null, `manage ${data}`);

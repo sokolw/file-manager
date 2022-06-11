@@ -3,21 +3,24 @@ import { InputManager } from './InputManager.js';
 import { cliCommands } from './enums/cliCommands.mjs';
 import { argsValidator } from './validators/argsValidator.mjs';
 import { getDefaultPath } from './action-functions/system/paths.mjs'
+import { messages } from './enums/messages.mjs';
 
-class Application {
+export class Application {
   static _userName;
+  static _currentPath;
 
   constructor(args) {
-    this._userName = argsValidator(args);
+    Application._userName = argsValidator(args);
+    Application._currentPath = getDefaultPath();
     this.start();
   }
 
   async start() {
-    console.log(`Welcome to the File Manager, ${this._userName}!`);
-    console.log(`You are currently in ${await getDefaultPath()}`);
+    console.log(messages.welcome(Application._userName));
+    console.log(messages.currentPath(Application._currentPath));
     const inputManager = new InputManager();
 
-    process.on('SIGINT', () => { console.log('Close process!'); process.exit(); });
+    process.on('SIGINT', () => { console.log(messages.exitApp(Application._userName)); process.exit(); });
 
     await pipeline(process.stdin, inputManager, process.stdout);
   }
