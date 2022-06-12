@@ -1,5 +1,5 @@
 import { cliArgsValidator } from '../../validators/cliArgsValidator.mjs';
-import { createPath, isExistDir } from '../system/paths.mjs';
+import { createPath, isExistDir, parsePaths } from '../system/paths.mjs';
 import { open } from 'fs/promises';
 import zlib from 'zlib';
 import { messages } from '../../enums/messages.mjs';
