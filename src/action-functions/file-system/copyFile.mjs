@@ -49,8 +49,7 @@ export const copyFile = async (args) => {
       if (streams.read instanceof Readable && !streams.read.destroyed) streams.read.destroy();
       if (streams.write instanceof Writable && !streams.write.destroyed) streams.write.destroy();
 
-    } catch(err) {
-      console.log(err);
+    } catch {
       if (streams.read instanceof Readable && !streams.read.destroyed) streams.read.destroy();
       if (streams.write instanceof Writable && !streams.write.destroyed) streams.write.destroy();
       return messages.fail().concat(EOL);
