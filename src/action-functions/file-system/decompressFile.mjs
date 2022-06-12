@@ -12,10 +12,12 @@ const argsCount = 2;
 const extCompress = '.br';
 
 export const decompressFile = async (args) => {
-  if (cliArgsValidator(args, argsCount)){
+  const argsParsed = parsePaths(args);
+
+  if (cliArgsValidator(argsParsed, argsCount)){
     const workPaths = {
-      srcFilePath : createPath(args[0]),
-      destPath : createPath(args[1]),
+      srcFilePath : createPath(argsParsed[0]),
+      destPath : createPath(argsParsed[1]),
     };
     const streams = {};
 

@@ -1,7 +1,7 @@
 import { messages } from '../../enums/messages.mjs';
 import { cliArgsValidator } from '../../validators/cliArgsValidator.mjs';
 import { EOL } from 'os';
-import { createPath, isExistDir } from '../system/paths.mjs';
+import { createPath, isExistDir, parsePaths } from '../system/paths.mjs';
 import { open } from 'fs/promises';
 import crypto from 'crypto';
 import { InputManager } from '../../InputManager.js';
@@ -11,8 +11,10 @@ const typeHash = 'sha256';
 const hexadecimal = 'hex';
 
 export const calculateHash = async (args) => {
-  if (cliArgsValidator(args, argsCount)){
-    const pathToFile = createPath(args[0]);
+  const argsParsed = parsePaths(args);
+  
+  if (cliArgsValidator(argsParsed, argsCount)){
+    const pathToFile = createPath(argsParsed[0]);
 
     try {
       if ((await isExistDir(pathToFile)) !== null) {
