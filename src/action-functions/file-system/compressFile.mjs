@@ -1,12 +1,12 @@
-import { cliArgsValidator } from "../../validators/cliArgsValidator.mjs";
-import { createPath, isExistDir } from "../system/paths.mjs";
+import { cliArgsValidator } from '../../validators/cliArgsValidator.mjs';
+import { createPath, isExistDir } from '../system/paths.mjs';
 import { open } from 'fs/promises';
 import zlib from 'zlib';
-import { messages } from "../../enums/messages.mjs";
-import { EOL } from "os";
-import { pipeline } from "stream/promises";
-import { Writable, Readable } from "stream";
-import path from "path";
+import { messages } from '../../enums/messages.mjs';
+import { EOL } from 'os';
+import { pipeline } from 'stream/promises';
+import { Writable, Readable } from 'stream';
+import path from 'path';
 
 const argsCount = 2;
 const extCompress = '.br';
@@ -51,4 +51,4 @@ export const compressFile = async (args) => {
   }
 
   return '';
-}
+};
