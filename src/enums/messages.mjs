@@ -5,4 +5,5 @@ export const messages = Object.freeze({
   invalid: () => { return `Invalid input` },
   fail: () => { return `Operation failed` },
   lineDelimiter : '------------------------------',
+  success : 'Completed successfully!',
 });
