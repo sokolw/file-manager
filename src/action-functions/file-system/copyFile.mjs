@@ -1,41 +1,85 @@
-import { createPath, isExistDir } from "../system/paths.mjs";
+import { createPath, isExistDir, parsePaths } from '../system/paths.mjs';
 import path from 'path';
-import { open } from "fs/promises";
-import { messages } from "../../enums/messages.mjs";
+import { open } from 'fs/promises';
+import { messages } from '../../enums/messages.mjs';
 import { EOL } from 'os';
-import { cliArgsValidator } from "../../validators/cliArgsValidator.mjs";
-import { pipeline } from "stream/promises";
-import { Writable, Readable } from "stream";
+import { cliArgsValidator } from '../../validators/cliArgsValidator.mjs';
+import { Writable, Readable } from 'stream';
 
 const argsCount = 2;
 
 export const copyFile = async (args) => {
-  if (cliArgsValidator(args, argsCount)){
-    const srcFilePath = createPath(args[0]);
-    const destFilePath = createPath(args[1]);
+  const argsParsed = parsePaths(args);
 
-    let readStream = null;
-    let writeStream = null;
+  if (cliArgsValidator(argsParsed, argsCount)){
+    const workPaths = {
+      srcFilePath : createPath(argsParsed[0]),
+      destPath : createPath(argsParsed[1]),
+    };
+    const streams = {};
 
     try {
-      if ((await isExistDir(srcFilePath)) !== null || (await isExistDir(destFilePath)) !== null) {
-        throw new Error();
+      if ((await isExistDir(workPaths.srcFilePath)) !== null) {
+        throw new Error('It is not file!');
       }
 
-      readStream = (await open(srcFilePath, 'r'))
+      if ((await isExistDir(workPaths.destPath)) !== null) {
+        workPaths.destPath = path.join(
+          workPaths.destPath,
+          path.parse(workPaths.srcFilePath).base);
+      }
+
+      streams.read = (await open(workPaths.srcFilePath, 'r'))
         .createReadStream();
-      writeStream = (await open(destFilePath, 'wx'))
+      streams.write = (await open(workPaths.destPath, 'wx+'))
         .createWriteStream();
 
-      await pipeline(readStream, writeStream);
-    } catch (err) {
-      if (readStream instanceof Readable && !readStream.destroyed) readStream.destroy();
-      if (writeStream instanceof Writable && !writeStream.destroyed) writeStream.destroy();
+      let flag = true;
+      while (flag) {
+        const chunk = await readChunk(streams.read);
+        if (chunk !== null) {
+          if (streams.write.writable) {
+            streams.write.write(chunk);
+          }
+        } else {
+          flag = false;
+        }
+      }
+
+      if (streams.read instanceof Readable && !streams.read.destroyed) streams.read.destroy();
+      if (streams.write instanceof Writable && !streams.write.destroyed) streams.write.destroy();
+
+    } catch(err) {
+      console.log(err);
+      if (streams.read instanceof Readable && !streams.read.destroyed) streams.read.destroy();
+      if (streams.write instanceof Writable && !streams.write.destroyed) streams.write.destroy();
       return messages.fail().concat(EOL);
     }
+
   } else {
     return messages.invalid().concat(EOL);
   }
 
   return '';
-}
+};
+
+const readChunk = async (readStream) => {
+  return new Promise((resolve, reject) => {
+    const callback = () => { resolve(null); };
+    readStream.once('end', callback);
+    readStream.once('data', (data) => {
+      readStream.removeListener('end', callback);
+      readStream.pause();
+      resolve(data);
+    });
+
+    if (readStream.isPaused()) {
+      readStream.resume();
+    }
+
+    if (!readStream.readable) {
+      resolve(null);
+    }
+
+  });
+};
