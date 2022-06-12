@@ -1,47 +1,52 @@
-import { createPath, isExistDir } from "../system/paths.mjs";
+import { createPath, isExistDir, parsePaths } from '../system/paths.mjs';
 import path from 'path';
-import { open, unlink } from "fs/promises";
-import { messages } from "../../enums/messages.mjs";
+import { open, unlink } from 'fs/promises';
+import { messages } from '../../enums/messages.mjs';
 import { EOL } from 'os';
-import { cliArgsValidator } from "../../validators/cliArgsValidator.mjs";
-import { pipeline } from "stream/promises";
-import { Writable, Readable } from "stream";
+import { cliArgsValidator } from '../../validators/cliArgsValidator.mjs';
+import { pipeline } from 'stream/promises';
+import { Writable, Readable } from 'stream';
 
 const argsCount = 2;
 
 export const moveFile = async (args) => {
-  if (cliArgsValidator(args, argsCount)){
-    const srcFilePath = createPath(args[0]);
-    const destPath = createPath(args[1]);
-    
-    let destFilePath = null;
-    let readStream = null;
-    let writeStream = null;
+  const argsParsed = parsePaths(args);
+
+  if (cliArgsValidator(argsParsed, argsCount)){
+    const workPaths = {
+      srcFilePath : createPath(argsParsed[0]),
+      destPath : createPath(argsParsed[1]),
+    };
+    const streams = {};
 
     try {
-      if ((await isExistDir(srcFilePath)) !== null) {
-        throw new Error();
+      if ((await isExistDir(workPaths.srcFilePath)) !== null) {
+        throw new Error('It is not file!');
       }
 
-      if ((await isExistDir(destPath)) !== null) {
-        destFilePath = path.join(destPath, path.parse(srcFilePath).base);
+      if ((await isExistDir(workPaths.destPath)) !== null) {
+        workPaths.destPath = path.join(
+          workPaths.destPath,
+          path.parse(workPaths.srcFilePath).base);
       }
 
-      readStream = (await open(srcFilePath, 'r'))
+      streams.read = (await open(workPaths.srcFilePath, 'r'))
         .createReadStream();
-      writeStream = (await open(destFilePath === null ? destPath : destFilePath, 'wx'))
+      streams.write = (await open(workPaths.destPath, 'wx'))
         .createWriteStream();
 
-      await pipeline(readStream, writeStream);
-      await unlink(srcFilePath);
-    } catch (err) {
-      if (readStream instanceof Readable && !readStream.destroyed) readStream.destroy();
-      if (writeStream instanceof Writable && !writeStream.destroyed) writeStream.destroy();
+      await pipeline(streams.read, streams.write);
+      await unlink(workPaths.srcFilePath);
+
+    } catch {
+      if (streams.read instanceof Readable && !streams.read.destroyed) streams.read.destroy();
+      if (streams.write instanceof Writable && !streams.write.destroyed) streams.write.destroy();
       return messages.fail().concat(EOL);
     }
+
   } else {
     return messages.invalid().concat(EOL);
   }
 
   return '';
-}
+};
