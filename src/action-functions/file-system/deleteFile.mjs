@@ -1,8 +1,8 @@
-import { createPath, isExistDir, parsePaths } from "../system/paths.mjs";
-import { unlink } from "fs/promises";
-import { messages } from "../../enums/messages.mjs";
+import { createPath, isExistDir, parsePaths } from '../system/paths.mjs';
+import { unlink } from 'fs/promises';
+import { messages } from '../../enums/messages.mjs';
 import { EOL } from 'os';
-import { cliArgsValidator } from "../../validators/cliArgsValidator.mjs";
+import { cliArgsValidator } from '../../validators/cliArgsValidator.mjs';
 
 const argsCount = 1;
 
@@ -28,4 +28,4 @@ export const deleteFile = async (args) => {
   }
 
   return '';
-}
+};

@@ -16,4 +16,4 @@ export const exitProgram = async (args) => {
     console.log(error);
   }
   
-}
+};

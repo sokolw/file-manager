@@ -28,4 +28,4 @@ export const getListFiles = async (args) => {
   }
 
   return `${messages.lineDelimiter}${EOL}${listFiles.result}${messages.lineDelimiter}${EOL}`;
-}
+};

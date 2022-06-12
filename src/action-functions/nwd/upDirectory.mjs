@@ -19,4 +19,4 @@ export const upDirectory = (args) => {
   }
 
   return '';
-}
+};

@@ -1,5 +1,5 @@
-import { messages } from "../../enums/messages.mjs";
-import { cliArgsValidator } from "../../validators/cliArgsValidator.mjs";
+import { messages } from '../../enums/messages.mjs';
+import { cliArgsValidator } from '../../validators/cliArgsValidator.mjs';
 import os, { EOL } from 'os';
 import { getDefaultPath } from './paths.mjs'; 
 

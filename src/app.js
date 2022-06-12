@@ -1,6 +1,5 @@
 import { pipeline } from 'stream/promises';
 import { InputManager } from './InputManager.js';
-import { cliCommands } from './enums/cliCommands.mjs';
 import { argsValidator } from './validators/argsValidator.mjs';
 import { getDefaultPath } from './action-functions/system/paths.mjs'
 import { messages } from './enums/messages.mjs';
@@ -18,6 +17,7 @@ export class Application {
   async start() {
     console.log(messages.welcome(Application._userName));
     console.log(messages.currentPath(Application._currentPath));
+    
     const inputManager = new InputManager();
 
     process.on('SIGINT', () => { console.log(messages.exitApp(Application._userName)); process.exit(); });

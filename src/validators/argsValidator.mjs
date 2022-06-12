@@ -1,4 +1,4 @@
-import { argsKeywords } from "../enums/argsKeyWords.mjs";
+import { argsKeywords } from '../enums/argsKeyWords.mjs';
 
 /**
  * Validate argument input username.
@@ -14,4 +14,4 @@ export const argsValidator = (args) => {
     console.log(`You entered your username incorrectly, now you: ${defaultName}!`);
     return defaultName;
   }
-}
+};
