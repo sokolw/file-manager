@@ -8,6 +8,8 @@ npm run start -- --username=your_username
 
 **Описание функционала:**
 
+- Приложение закрывается, если пользователь нажал `ctrl+c` или отправил команду `.exit`
+
 - Навигация & рабочий каталог
     - Контракт для использования путей с пробелами:
         - Заключите путь с пробелами в двойные кавычки: `"C:\Program Files\Test File.txt"`
@@ -115,6 +117,8 @@ npm run start -- --username=your_username
 ```
 
 **Functional description:**
+
+- Application exits if user pressed `ctrl+c` or sent `.exit` command
 
 - Navigation & working directory
     - Contract for using paths with spaces:
