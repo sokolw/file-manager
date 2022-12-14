@@ -1,0 +1,19 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "Simple cli file-manager",
+  "type": "module",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sokolw/file-manager.git"
+  },
+  "keywords": [
+    "file-manager",
+    "cli"
+  ],
+  "author": "sokolw",
+  "license": "ISC"
+}
