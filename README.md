@@ -1,5 +1,5 @@
 [RU] Проект: **file-manager** 
-- `Используйте версию Node.js: LTS 16.15.0`
+- `Использовалась версия Node.js: LTS v18.12.1`
 - Написано в Windows 10 Enterprise LTSC 2019
 - Программа запускается с помощью npm-script, для запуска используйте команду:
 ```bash
@@ -109,7 +109,7 @@ npm run start -- --username=your_username
     decompress path_to_file path_to_destination
     ```
 [EN] Project: **file-manager**
-- `Use Node.js version: LTS 16.15.0`
+- `Used Node.js version: LTS v18.12.1`
 - Written in Windows 10 Enterprise LTSC 2019
 - The program is started by npm-script start in following way:
 ```bash
